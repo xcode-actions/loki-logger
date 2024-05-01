@@ -60,30 +60,7 @@ public struct LogMessage : Hashable, Codable, Sendable {
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.unkeyedContainer()
 		
-		var dateSecondsStr = String(date.timeIntervalSince1970)
-		/* If the timestamp is exactly at the epoch, we encode 0.
-		 * In theory we could check only if the str is exactly "0.0" (even "0"), but  */
-		if (dateSecondsStr.filter{ $0 != "0" && $0 != "." }).isEmpty {
-			try container.encode("0")
-			
-		/* Check if we have a decimal in the string representation of the timestamp.
-		 * In theory this should _always_ be the case as Swift always put the decimal separator when encoding a Double. */
-		} else if let decimalSeparatorIndex = dateSecondsStr.firstIndex(of: ".") {
-			let nCharsAfterDecimal = dateSecondsStr.distance(from: decimalSeparatorIndex, to: dateSecondsStr.endIndex) - 1
-			dateSecondsStr.remove(at: decimalSeparatorIndex)
-			if nCharsAfterDecimal > 9 {
-				/* Let’s remove the additional decimals we have. */
-				dateSecondsStr.removeLast(nCharsAfterDecimal - 9)
-			} else if nCharsAfterDecimal < 9 {
-				/* Let’s add some 0s to have the correct number of decimals. */
-				dateSecondsStr.append(String(repeating: "0", count: 9 - nCharsAfterDecimal))
-			}
-			try container.encode(dateSecondsStr)
-			
-		} else {
-			try container.encode(dateSecondsStr + "000000000")
-		}
-		
+		try container.encode(date.lokiTimestamp())
 		try container.encode(message)
 		
 		if !metadata.isEmpty {
