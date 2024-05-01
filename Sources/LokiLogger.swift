@@ -47,7 +47,7 @@ public struct LokiLogger : LogHandler {
 		var urlRequest = URLRequest(url: lokiServerIngestionURL)
 		urlRequest.httpMethod = "POST"
 		urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-		do    {urlRequest.httpBody = try Self.encoder.encode(chunk)}
+		do    {urlRequest.httpBody = try Self.encoder.encode(["streams": [chunk]])}
 		catch {
 			urlRequest.httpBody = Data((
 				#"{"streams":[{"# +
