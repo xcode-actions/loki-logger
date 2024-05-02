@@ -4,6 +4,14 @@ import Foundation
 
 internal extension String {
 	
+	func sanitizedForLokiKey() -> String {
+		var ret = self
+		while let r = ret.rangeOfCharacter(from: Self.forbiddenCharsInLokiKey, options: .literal) {
+			ret.replaceSubrange(r, with: "_")
+		}
+		return ret
+	}
+	
 	/* *** From json-logger *** */
 	
 	func safifyForJSON() -> String {
@@ -136,6 +144,8 @@ internal extension String {
 		}
 		return (sepOpen + ascii.joined(separator: "") + (specialCharState.flatMap{ String($0.0) + String(repeating: "#", count: $0.1) } ?? "") + sepClose, hasProcessedNewLines)
 	}
+	
+	private static let forbiddenCharsInLokiKey = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789").inverted
 	
 	private static let newLines = CharacterSet.newlines
 	private static let specialChars = CharacterSet(charactersIn: #""\"#)

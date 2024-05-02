@@ -56,8 +56,8 @@ public struct LokiLogger : LogHandler {
 						#""\#(Date().lokiTimestamp().safifyForJSON())","# +
 						#""MANGLED LOG MESSAGE (see LokiLogger doc) -- \#(message.description.safifyForJSON())","# +
 						#"{"# +
-							#""LokiLogger.LogInfo":"Original metadata removed (see LokiLogger doc)","# +
-							#""LokiLogger.LogError":"\#(String(describing: error).safifyForJSON())""# +
+							#""LokiLogger_LogInfo":"Original metadata removed (see LokiLogger doc)","# +
+							#""LokiLogger_LogError":"\#(String(describing: error).safifyForJSON())""# +
 						#"}"# +
 					#"]]"# +
 				#"}]}"#

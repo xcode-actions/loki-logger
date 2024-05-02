@@ -64,7 +64,7 @@ public struct LogMessage : Hashable, Codable, Sendable {
 		try container.encode(message)
 		
 		if !metadata.isEmpty {
-			try container.encode(metadata)
+			try container.encode(Dictionary(metadata.map{ ($0.key.sanitizedForLokiKey(), $0.value) }, uniquingKeysWith: { old, new in new }) )
 		}
 	}
 	
