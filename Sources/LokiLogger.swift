@@ -119,7 +119,7 @@ private extension LokiLogger {
 	}
 	
 	func flatMetadataDictionary(_ metadata: Logger.Metadata) -> [String: String] {
-		return metadata.mapValues(prettyMetadataValue)
+		return metadata.mapValues{ prettyMetadataValue($0, showQuotes: false) }
 	}
 	
 	func flatMetadataArray(_ metadata: Logger.Metadata) -> [String] {
@@ -128,18 +128,18 @@ private extension LokiLogger {
 			return (
 				key.processForLogging(escapingMode: .escapeScalars(asASCII: true, octothorpLevel: 1), newLineProcessing: .escape).string +
 				": " +
-				prettyMetadataValue(val)
+				prettyMetadataValue(val, showQuotes: true)
 			)
 		}
 	}
 	
-	func prettyMetadataValue(_ v: Logger.MetadataValue) -> String {
+	func prettyMetadataValue(_ v: Logger.MetadataValue, showQuotes: Bool) -> String {
 		/* We return basically v.description, but dictionary keys are sorted. */
 		return switch v {
-			case .string(let str):      str.processForLogging(escapingMode: .escapeScalars(asASCII: false, octothorpLevel: nil, showQuotes: true), newLineProcessing: .escape).string
-			case .array(let array):     #"["# + array.map{ prettyMetadataValue($0) }.joined(separator: ", ") + #"]"#
-			case .dictionary(let dict): #"["# +              flatMetadataArray(dict).joined(separator: ", ") + #"]"#
-			case .stringConvertible(let c): prettyMetadataValue(.string(c.description))
+			case .string(let str):      str.processForLogging(escapingMode: .escapeScalars(asASCII: false, octothorpLevel: nil, showQuotes: showQuotes), newLineProcessing: .escape).string
+			case .array(let array):     #"["# + array.map{ prettyMetadataValue($0, showQuotes: true) }.joined(separator: ", ") + #"]"#
+			case .dictionary(let dict): #"["# +              flatMetadataArray(dict)                  .joined(separator: ", ") + #"]"#
+			case .stringConvertible(let c): prettyMetadataValue(.string(c.description), showQuotes: showQuotes)
 		}
 	}
 	
