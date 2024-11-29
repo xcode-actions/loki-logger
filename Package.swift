@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.8
 import PackageDescription
 
 
@@ -25,7 +25,7 @@ let package = Package(
 			ret.append(.product(name: "Logging",             package: "swift-log"))
 			ret.append(.product(name: "URLRequestOperation", package: "URLRequestOperation"))
 			return ret
-		}(), path: "Sources"),
+		}(), path: "Sources", swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]),
 		.testTarget(name: "LokiLoggerTests", dependencies: ["LokiLogger"], path: "Tests")
 	]
 )
