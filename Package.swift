@@ -16,7 +16,7 @@ let package = Package(
 	dependencies: {
 		var ret = [Package.Dependency]()
 		ret.append(.package(url: "https://github.com/apple/swift-log.git",             from: "1.5.1"))
-		ret.append(.package(url: "https://github.com/Frizlab/URLRequestOperation.git", from: "2.0.0-alpha.16"))
+		ret.append(.package(url: "https://github.com/Frizlab/URLRequestOperation.git", from: "2.0.0-alpha.17"))
 		return ret
 	}(),
 	targets: [
